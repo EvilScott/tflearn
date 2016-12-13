@@ -16,7 +16,7 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 keep_prob = tf.placeholder(tf.float32)
 
 # layers
-y = tf.nn.sigmoid(tf.matmul(x, W1) + b1)
+y = tf.nn.relu(tf.matmul(x, W1) + b1)
 y = tf.nn.dropout(y, keep_prob)
 y = tf.matmul(y, W2) + b2
 
@@ -27,8 +27,8 @@ train_step = tf.train.AdamOptimizer().minimize(cross_entropy)
 # training
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
-for _ in range(10000):
-    batch_xs, batch_ys = mnist.train.next_batch(100)
+while mnist.train.epochs_completed < 5:
+    batch_xs, batch_ys = mnist.train.next_batch(50)
     sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.8})
 
 # testing
